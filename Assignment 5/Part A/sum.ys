@@ -1,0 +1,41 @@
+#Taimoor Arif 21100121
+
+.pos 0  #Execution of the program from 0x0
+irmovq stack, %rsp  #Stack pointer
+
+
+call main
+halt
+
+        .align 8			# Thelinked list
+  ele1:
+        .quad 0x00a
+        .quad ele2
+  ele2:
+        .quad 0x0b0
+        .quad ele3
+  ele3:
+        .quad 0xc00
+        .quad 0
+
+main:
+        irmovq ele1, %rdi 
+        call summation     
+        ret
+
+summation:
+        irmovq    $0, %rax  		#Return value set as 0   
+        andq    %rdi, %rdi   
+        je  end               
+loop:   mrmovq  (%rdi), %rcx 		
+        addq    %rcx, %rax     		#Adding the value in rcx in the return value (Result)
+        mrmovq  8(%rdi),  %rdi  	#Giving address of the next node to the pointer
+        andq    %rdi, %rdi   		
+        jne loop              
+end:
+        ret                   
+
+
+.pos 0x300			#Stack starts from 0x300
+stack:
+

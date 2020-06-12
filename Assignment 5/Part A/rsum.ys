@@ -1,0 +1,38 @@
+#Taimoor Arif 21100121
+
+.pos 0  #Execution of the program from 0x0
+irmovq stack, %rsp  #Stack pointer
+
+call main
+halt
+
+	.align 8		#linked list
+  ele1:
+	.quad 0x00a
+	.quad ele2
+  ele2:
+	.quad 0x0b0
+	.quad ele3
+  ele3:
+	.quad 0xc00
+	.quad 0
+main:
+	irmovq ele1, %rdi
+        irmovq $0, %rax		#Return value set as 0
+	call recursivesum
+	ret
+
+recursivesum:
+        pushq   %r8
+        andq    %rdi, %rdi	#Checking for the end of list
+        je  end			#If true, program jumps to end
+        mrmovq  (%rdi), %r8	#Storing the value at the Noe in r8
+        mrmovq  8(%rdi),  %rdi	#Moving to next node
+        call    recursivesum
+        addq    %r8, %rax 	#Adding the value in r8 to the current result
+end:
+        popq    %r8
+        ret
+
+.pos 0x300 			#Stack grows downwards from 0x300
+stack:
